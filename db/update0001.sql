@@ -1,8 +1,7 @@
 CREATE TABLE stars (
-    pid   PRIMARY KEY,
+    pid,
     login,
     stardate INTEGER
 );
 
-CREATE UNIQUE INDEX idx_stars_pid ON stars(pid);
-CREATE INDEX idx_stars_login ON stars(login);
+CREATE UNIQUE INDEX idx_stars_pid_login ON stars(pid, login);
