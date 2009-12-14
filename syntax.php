@@ -52,7 +52,7 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
         $arr = $db->res2arr($res);
 
         if(!count($arr)){
-            $R->cdate($this->getLang['none']);
+            $R->cdata($this->getLang('none'));
             return true;
         }
 
