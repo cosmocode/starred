@@ -7,8 +7,8 @@
 
 
 $lang['star_on']  = 'Gemerkt - klicken, um diese Seite zu vergessen.';
-$lang['star_off'] = 'Nicht germerkt - klickem, um diese Seite zu merken.';
-$lang['login']    = 'Bitte loggen Sie sich ein um Ihre gemerkten Seiten zu sehen.';
+$lang['star_off'] = 'Nicht gemerkt - klickem, um diese Seite zu merken.';
+$lang['login']    = 'Bitte loggen Sie sich ein, um Ihre gemerkten Seiten zu sehen.';
 $lang['none']     = 'Sie haben momentan keine gemerkten Seiten.';
 
 
