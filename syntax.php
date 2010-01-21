@@ -60,7 +60,7 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
         foreach($arr as $row){
             $R->listitem_open(1);
             $R->listcontent_open();
-            $R->internallink(':'.$row['pid']);
+            $R->internallink(':'.$row['pid'],null,null,false,'navigation');
             $R->cdata(' '.dformat($row['stardate'],'%f'));
 
             $R->listcontent_close();
