@@ -83,10 +83,11 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
      * load the sqlite helper
      */
     function _getDB(){
-        $db =& plugin_load('helper', 'sqlite');
-        if($db->init('starred',dirname(__FILE__).'/db/')){
+        $db = plugin_load('helper', 'sqlite');
+        if(!is_null($db) && $db->init('starred',dirname(__FILE__).'/db/')){
             return $db;
         }else{
+            msg($this->getLang('e_nosqlite'), -1);
             return false;
         }
     }
