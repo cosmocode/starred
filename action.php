@@ -46,7 +46,7 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
      */
     function _startoggle(){
         global $ID;
-        if(!$_SERVER['REMOTE_USER']) return;
+        if(!isset($_SERVER['REMOTE_USER'])) return;
 
         $db = $this->_getDB();
         if(!$db) return;
@@ -96,7 +96,7 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
      */
     function tpl_starred($inneronly=false){
         global $ID;
-        if(!$_SERVER['REMOTE_USER']) return;
+        if(!isset($_SERVER['REMOTE_USER'])) return;
 
         $dt = $this->_starmode();
 

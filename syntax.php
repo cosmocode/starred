@@ -33,8 +33,8 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
         if($mode != 'xhtml') return false;
         $R->info['cache'] = false;
 
-        if(!$_SERVER['REMOTE_USER']){
-            $R->cdata($this->getLang['login']);
+        if(!isset($_SERVER['REMOTE_USER'])){
+            $R->cdata($this->getLang('login'));
             return true;
         }
 
