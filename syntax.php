@@ -47,13 +47,13 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
         $arr = $db->res2arr($res);
 
         if(!count($arr)){
-            $R->p_open();
+            $R->doc .= '<p class="plugin_starred">';
             $R->cdata($this->getLang('none'));
             $R->p_close();
             return true;
         }
 
-        $R->listu_open();
+        $R->doc .= '<ul class="plugin_starred">';
         foreach($arr as $row){
             $R->listitem_open(1);
             $R->listcontent_open();
