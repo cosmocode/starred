@@ -22,7 +22,7 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
     function getSort() { return 155; }
 
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('{{starred(?:>min)?(?:\|\d+)}}',$mode,'plugin_starred');
+        $this->Lexer->addSpecialPattern('{{starred(?:>min)?(?:\|\d+)?}}',$mode,'plugin_starred');
     }
 
     function handle($match, $state, $pos, &$handler){
