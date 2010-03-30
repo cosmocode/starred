@@ -22,11 +22,13 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
     function getSort() { return 155; }
 
     function connectTo($mode) {
-        $this->Lexer->addSpecialPattern('{{starred}}',$mode,'plugin_starred');
+        $this->Lexer->addSpecialPattern('{{starred(?:>min)?(?:\|\d+)}}',$mode,'plugin_starred');
     }
 
     function handle($match, $state, $pos, &$handler){
-        return array();
+        preg_match('{{starred((?:>min)?)\|?(\d*)}}', $match, $matches);
+        return array('min' => $matches[1] !== '',
+                     'limit' => $matches[2]);
     }
 
     function render($mode, &$R, $data) {
@@ -43,13 +45,18 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
         if(!$db) return true;
 
         $sql = "SELECT pid, stardate FROM stars WHERE login = ? ORDER BY stardate DESC";
+        if ($data['limit'] !== '') {
+            $sql .= ' LIMIT ' . $data['limit'];
+        }
         $res = $db->query($sql,$_SERVER['REMOTE_USER']);
         $arr = $db->res2arr($res);
 
         if(!count($arr)){
-            $R->doc .= '<p class="plugin_starred">';
-            $R->cdata($this->getLang('none'));
-            $R->p_close();
+            if (!$data['min']) {
+                $R->doc .= '<p class="plugin_starred">';
+                $R->cdata($this->getLang('none'));
+                $R->p_close();
+            }
             return true;
         }
 
@@ -58,8 +65,9 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
             $R->listitem_open(1);
             $R->listcontent_open();
             $R->internallink(':'.$row['pid'],null,null,false,'navigation');
-            $R->cdata(' '.dformat($row['stardate'],'%f'));
-
+            if (!$data['min']) {
+                $R->cdata(' '.dformat($row['stardate'],'%f'));
+            }
             $R->listcontent_close();
             $R->listitem_close();
         }
