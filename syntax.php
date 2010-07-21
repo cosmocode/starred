@@ -51,16 +51,18 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
         $res = $db->query($sql,$_SERVER['REMOTE_USER']);
         $arr = $db->res2arr($res);
 
+        $R->doc .= '<div class="plugin_starred">';
         if(!count($arr)){
             if (!$data['min']) {
-                $R->doc .= '<p class="plugin_starred">';
+                $R->doc .= '<p>';
                 $R->cdata($this->getLang('none'));
                 $R->p_close();
             }
+            $R->doc .= '</div';
             return true;
         }
 
-        $R->doc .= '<ul class="plugin_starred">';
+        $R->doc .= '<ul>';
         foreach($arr as $row){
             $R->listitem_open(1);
             $R->listcontent_open();
@@ -72,6 +74,7 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
             $R->listitem_close();
         }
         $R->listu_close();
+        $R->doc .= '</div>';
     }
 }
 
