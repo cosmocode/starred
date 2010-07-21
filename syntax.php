@@ -58,7 +58,7 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
                 $R->cdata($this->getLang('none'));
                 $R->p_close();
             }
-            $R->doc .= '</div';
+            $R->doc .= '</div>';
             return true;
         }
 
