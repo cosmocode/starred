@@ -44,7 +44,15 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
         $db = $action->_getDB();
         if(!$db) return true;
 
-        $sql = "SELECT pid, stardate FROM stars WHERE login = ? ORDER BY stardate DESC";
+        $sql = "SELECT pid, stardate FROM stars WHERE ";
+
+        global $auth;
+        if ($auth && !$auth->isCaseSensitive()) {
+            $sql .= 'lower(login) = lower(?)';
+        } else {
+            $sql .= 'login = ?';
+        }
+        $sql .= " ORDER BY stardate DESC";
         if ($data['limit'] !== '') {
             $sql .= ' LIMIT ' . $data['limit'];
         }
