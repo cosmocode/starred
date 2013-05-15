@@ -1,20 +1,17 @@
 /**
  * Attach AJAX action to the star
  */
-addInitEvent(function(){
-    var obj = $('plugin__starred');
+jQuery(function(){
+    var obj = jQuery('#plugin__starred');
     if(!obj) return;
 
-    addEvent(obj,'click',function(e){
-        var ajax = new sack(DOKU_BASE + 'lib/exe/ajax.php');
-        ajax.AjaxFailedAlert = '';
-        ajax.encodeURIString = false;
-        if(ajax.failed) return true;
-
-        ajax.elementObj = obj;
-        ajax.setVar('call','startoggle');
-        ajax.setVar('id',JSINFO['id']);
-        ajax.runAJAX();
+    obj.click(function(e) {
+        jQuery.post(DOKU_BASE + 'lib/exe/ajax.php', {
+                call: 'startoggle',
+                id: JSINFO['id']
+            }).done(function (data) {
+                    obj.html(data);
+                });
 
         e.preventDefault();
         e.stopPropagation();
