@@ -14,7 +14,6 @@ if (!defined('DOKU_TAB')) define('DOKU_TAB', "\t");
 if (!defined('DOKU_PLUGIN')) define('DOKU_PLUGIN',DOKU_INC.'lib/plugins/');
 
 require_once(DOKU_PLUGIN.'action.php');
-
 class action_plugin_starred extends DokuWiki_Action_Plugin {
 
     function register(&$controller) {
@@ -36,31 +35,36 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
     }
 
     function handle_action_act_preprocess(&$event, $param) {
-        if($event->data != 'startoggle') return;
-        $this->_startoggle();
+        if(substr($event->data,0,10) != 'startoggle') return;
+        $id = substr($event->data,11);
+        $this->_startoggle($id);
         $event->data = 'show';
     }
 
     /**
      * toggle the star for the current user and page
      */
-    function _startoggle(){
+    function _startoggle($custom_ID = false){
         global $ID;
         if(!isset($_SERVER['REMOTE_USER'])) return;
 
         $db = $this->_getDB();
         if(!$db) return;
 
-        $on = $this->_starmode(); // currently on?
+        if ($custom_ID === false) {
+            $custom_ID = $ID;
+        }
+
+        $on = $this->_starmode($custom_ID); // currently on?
 
         if($on){
             //delete
             $sql = "DELETE FROM stars WHERE pid = ? AND login = ?";
-            $db->query($sql,$ID,$_SERVER['REMOTE_USER']);
+            $db->query($sql,$custom_ID,$_SERVER['REMOTE_USER']);
         }else{
             //add
             $sql = "INSERT OR IGNORE INTO stars (pid,login,stardate) VALUES (?,?,?)";
-            $db->query($sql,$ID,$_SERVER['REMOTE_USER'],time());
+            $db->query($sql,$custom_ID,$_SERVER['REMOTE_USER'],time());
         }
 
     }
@@ -68,13 +72,17 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
     /**
      * check the star for the current user and page
      */
-    function _starmode(){
+    function _starmode($custom_ID = false){
         global $ID;
         $db = $this->_getDB();
         if(!$db) return;
 
+        if ($custom_ID === false) {
+            $custom_ID = $ID;
+        }
+
         $sql = "SELECT stardate FROM stars WHERE pid = ? AND login = ?";
-        $res = $db->query($sql,$ID,$_SERVER['REMOTE_USER']);
+        $res = $db->query($sql,$custom_ID,$_SERVER['REMOTE_USER']);
         $row = $db->res2row($res);
         return (int) $row['stardate'];
     }
@@ -95,13 +103,15 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
     /**
      * Print the current star state
      */
-    function tpl_starred($inneronly=false){
+    function tpl_starred($inneronly=false, $custom_ID = false){
         global $ID;
         if(!isset($_SERVER['REMOTE_USER'])) return;
+        if ($custom_ID === false) {
+            $custom_ID = $ID;
+        }
+        $dt = $this->_starmode($custom_ID);
 
-        $dt = $this->_starmode();
-
-        if(!$inneronly) echo '<a href="'.wl($ID,array('do'=>'startoggle')).'" id="plugin__starred">';
+        if(!$inneronly) echo '<a href="'.wl($ID,array('do'=>'startoggle_'.$custom_ID)).'" id="plugin__starred">';
         if($dt){
             echo '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star.png" width="16" height="16" title="'.$this->getLang('star_on').'" alt="★" />';
         }else{
