@@ -78,10 +78,8 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
             if (!$data['min']) {
                 $R->cdata(' '.dformat($row['stardate'],'%f'));
             }
-            ob_start();
-            $starred->tpl_starred(false, $row['pid']);
-            $star = ob_get_clean ();
-            $R->doc .= $star;
+            global $ID;
+            $R->doc .= $starred->create_star_html($ID, $row['pid'], false);
             $R->listcontent_close();
             $R->listitem_close();
         }

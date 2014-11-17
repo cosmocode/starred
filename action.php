@@ -109,16 +109,24 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
         if ($custom_ID === false) {
             $custom_ID = $ID;
         }
+        echo $this->create_star_html($ID, $custom_ID, $inneronly);
+    }
+
+    function create_star_html($ID, $custom_ID, $inneronly=false) {
+        $result = '';
         $dt = $this->_starmode($custom_ID);
-
-        if(!$inneronly) echo '<a href="'.wl($ID,array('do'=>'startoggle_'.$custom_ID)).'" id="plugin__starred">';
-        if($dt){
-            echo '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star.png" width="16" height="16" title="'.$this->getLang('star_on').'" alt="★" />';
-        }else{
-            echo '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star_grey.png" width="16" height="16" title="'.$this->getLang('star_off').'" alt="☆" />';
+        if(!$inneronly) {
+            $result .= '<a href="'.wl($ID,array('do'=>'startoggle_'.$custom_ID)).'" class="plugin__starred">';
         }
-        if(!$inneronly) echo '</a>';
-
+        if($dt){
+            $result .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star.png" width="16" height="16" title="'.$this->getLang('star_on').'" alt="★" />';
+        }else{
+            $result .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star_grey.png" width="16" height="16" title="'.$this->getLang('star_off').'" alt="☆" />';
+        }
+        if(!$inneronly) {
+            $result .=  '</a>';
+        }
+        return $result;
     }
 
 }
