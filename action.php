@@ -73,14 +73,9 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
     /**
      * check the star for the current user and page
      */
-    function _starmode($custom_ID = false){
-        global $ID;
+    function _starmode($custom_ID){
         $db = $this->_getDB();
         if(!$db) return;
-
-        if ($custom_ID === false) {
-            $custom_ID = $ID;
-        }
 
         $sql = "SELECT stardate FROM stars WHERE pid = ? AND login = ?";
         $res = $db->query($sql,$custom_ID,$_SERVER['REMOTE_USER']);
