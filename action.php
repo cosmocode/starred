@@ -102,15 +102,12 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
     }
 
     /**
-     * Print the current star state
+     * Print the current star state for the current page
      */
-    function tpl_starred($inneronly=false, $custom_ID = false){
+    function tpl_starred($inneronly=false){
         global $ID;
         if(!isset($_SERVER['REMOTE_USER'])) return;
-        if ($custom_ID === false) {
-            $custom_ID = $ID;
-        }
-        echo $this->create_star_html($ID, $custom_ID, $inneronly, true);
+        echo $this->create_star_html($ID, $ID, $inneronly, true);
     }
 
     function create_star_html($ID, $custom_ID, $inneronly=false, $id=false) {
