@@ -110,6 +110,15 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
         echo $this->create_star_html($ID, $ID, $inneronly, true);
     }
 
+    /**
+     * Create the html for a star
+     *
+     * @param $ID The page where the star is supposed to appear.
+     * @param $custom_ID The page which the star is supposed to toggle.
+     * @param bool $inneronly
+     * @param bool $id Must not be true more than once per page
+     * @return string The html for the star
+     */
     function create_star_html($ID, $custom_ID, $inneronly=false, $id=false) {
         $result = '';
         $dt = $this->_starmode($custom_ID);
