@@ -109,15 +109,21 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
         if ($custom_ID === false) {
             $custom_ID = $ID;
         }
-        echo $this->create_star_html($ID, $custom_ID, $inneronly);
+        echo $this->create_star_html($ID, $custom_ID, $inneronly, true);
     }
 
-    function create_star_html($ID, $custom_ID, $inneronly=false) {
+    function create_star_html($ID, $custom_ID, $inneronly=false, $id=false) {
         $result = '';
         $dt = $this->_starmode($custom_ID);
-        if(!$inneronly) {
-            $result .= '<a href="'.wl($ID,array('do'=>'startoggle_'.$custom_ID)).'" class="plugin__starred">';
+        if($inneronly === false) {
+            $result .= '<a href="' . wl($ID, array('do' => 'startoggle_' . $custom_ID)) . '" class="plugin__starred"';
+            if($id === true) {
+                $result .= ' id="plugin__starred">';
+            } else {
+                $result .= '>';
+            }
         }
+
         if($dt){
             $result .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star.png" width="16" height="16" title="'.$this->getLang('star_on').'" alt="★" />';
         }else{
