@@ -36,7 +36,7 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
     }
 
     function handle_action_act_preprocess(&$event, $param) {
-        if(substr($event->data,0,10) != 'startoggle') return;
+        if(substr(act_clean($event->data),0,10) != 'startoggle') return;
         $id = substr($event->data,11);
         $this->_startoggle($id);
         $event->data = 'show';
