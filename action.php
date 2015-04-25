@@ -117,6 +117,62 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
         return $ret;
     }
 
+    /**
+     * Print the current's user starred pages
+     * @param bool $min 
+     * @param int|string $limit limit of listed pages
+     * @param bool $print Should the HTML be printed or returned?
+     * @return null|string
+     */
+    function tpl_starred_pages($min=false, $limit='',$print=true) {
+        if(!isset($_SERVER['REMOTE_USER'])) return;
+
+        $db = $this->_getDB();
+        if(!$db) return true;
+
+        $sql = "SELECT pid, stardate FROM stars WHERE ";
+
+        global $auth;
+        if ($auth && !$auth->isCaseSensitive()) {
+            $sql .= 'lower(login) = lower(?)';
+        } else {
+            $sql .= 'login = ?';
+        }
+        $sql .= " ORDER BY stardate DESC";
+        if (is_int($limit) || ctype_digit($limit)) {
+            $sql .= ' LIMIT ' . $limit;
+        }
+        $res = $db->query($sql,$_SERVER['REMOTE_USER']);
+        $arr = $db->res2arr($res);
+        
+        $ret = '';
+
+        $ret .= '<div class="plugin_starred">';
+        if (!count($arr)) {
+            if (!$min) {
+            	$ret .= '<p>';
+            	$ret .= hsc($this->getLang('none'));
+            	$ret .= '</p>';
+            }
+        } else {
+        	$ret .= '<ul>'.DOKU_LF;
+            foreach($arr as $row){
+                $ret .= '<li class="level1">';
+                $ret .= '<div class="li">';
+                $ret .= html_wikilink($row['pid']);
+                if (!$min) {
+            	    $ret .= hsc(' '.dformat($row['stardate'],'%f'));
+                }
+                $ret .= '</div>';
+                $ret .= '</li>'.DOKU_LF;
+            }
+            $ret .= '</ul>';
+        }
+        $ret .= '</div>'.DOKU_LF;
+        
+        if($print) echo $ret;
+        return $ret;
+    }
 }
 
 // vim:ts=4:sw=4:et:enc=utf-8:
