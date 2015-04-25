@@ -94,21 +94,27 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
 
     /**
      * Print the current star state
+     * @param bool $inneronly TBD
+     * @param bool $print Should the HTML be printed or returned?
+     * @return null|string
      */
-    function tpl_starred($inneronly=false){
+    function tpl_starred($inneronly=false, $print=true){
         global $ID;
         if(!isset($_SERVER['REMOTE_USER'])) return;
 
         $dt = $this->_starmode();
+        
+        $ret = '';
 
-        if(!$inneronly) echo '<a href="'.wl($ID,array('do'=>'startoggle')).'" id="plugin__starred">';
+        if(!$inneronly) $ret .= '<a href="'.wl($ID,array('do'=>'startoggle')).'" id="plugin__starred">';
         if($dt){
-            echo '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star.png" width="16" height="16" title="'.$this->getLang('star_on').'" alt="★" />';
+            $ret .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star.png" width="16" height="16" title="'.$this->getLang('star_on').'" alt="★" />';
         }else{
-            echo '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star_grey.png" width="16" height="16" title="'.$this->getLang('star_off').'" alt="☆" />';
+            $ret .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star_grey.png" width="16" height="16" title="'.$this->getLang('star_off').'" alt="☆" />';
         }
-        if(!$inneronly) echo '</a>';
-
+        if(!$inneronly) $ret .= '</a>';
+        if($print) echo $ret;
+        return $ret;
     }
 
 }
