@@ -159,7 +159,7 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
             foreach($arr as $row){
                 $ret .= '<li class="level1">';
                 $ret .= '<div class="li">';
-                $ret .= html_wikilink($row['pid']);
+                $ret .= html_wikilink(':'.$row['pid']);
                 if (!$min) {
             	    $ret .= hsc(' '.dformat($row['stardate'],'%f'));
                 }
