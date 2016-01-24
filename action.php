@@ -17,7 +17,7 @@ require_once(DOKU_PLUGIN.'action.php');
 
 class action_plugin_starred extends DokuWiki_Action_Plugin {
 
-    function register(&$controller) {
+    function register(Doku_Event_Handler $controller) {
 
        $controller->register_hook('AJAX_CALL_UNKNOWN', 'BEFORE', $this, 'handle_ajax_call_unknown');
        $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'handle_action_act_preprocess');
