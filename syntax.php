@@ -25,13 +25,13 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
         $this->Lexer->addSpecialPattern('{{starred(?:>min)?(?:\|\d+)?}}',$mode,'plugin_starred');
     }
 
-    function handle($match, $state, $pos, &$handler){
+    function handle($match, $state, $pos, Doku_Handler $handler){
         preg_match('{{starred((?:>min)?)\|?(\d*)}}', $match, $matches);
         return array('min' => $matches[1] !== '',
                      'limit' => $matches[2]);
     }
 
-    function render($mode, &$R, $data) {
+    function render($mode, Doku_Renderer $R, $data) {
         if($mode != 'xhtml') return false;
         $R->info['cache'] = false;
 
