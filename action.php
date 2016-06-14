@@ -36,31 +36,36 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
     }
 
     function handle_action_act_preprocess(&$event, $param) {
-        if($event->data != 'startoggle') return;
-        $this->_startoggle();
+        if(substr(act_clean($event->data),0,10) != 'startoggle') return;
+        $id = substr($event->data,11);
+        $this->_startoggle($id);
         $event->data = 'show';
     }
 
     /**
      * toggle the star for the current user and page
      */
-    function _startoggle(){
+    function _startoggle($custom_ID = false){
         global $ID;
         if(!isset($_SERVER['REMOTE_USER'])) return;
 
         $db = $this->_getDB();
         if(!$db) return;
 
-        $on = $this->_starmode(); // currently on?
+        if ($custom_ID === false) {
+            $custom_ID = $ID;
+        }
+
+        $on = $this->_starmode($custom_ID); // currently on?
 
         if($on){
             //delete
             $sql = "DELETE FROM stars WHERE pid = ? AND login = ?";
-            $db->query($sql,$ID,$_SERVER['REMOTE_USER']);
+            $db->query($sql,$custom_ID,$_SERVER['REMOTE_USER']);
         }else{
             //add
             $sql = "INSERT OR IGNORE INTO stars (pid,login,stardate) VALUES (?,?,?)";
-            $db->query($sql,$ID,$_SERVER['REMOTE_USER'],time());
+            $db->query($sql,$custom_ID,$_SERVER['REMOTE_USER'],time());
         }
 
     }
@@ -68,13 +73,12 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
     /**
      * check the star for the current user and page
      */
-    function _starmode(){
-        global $ID;
+    function _starmode($custom_ID){
         $db = $this->_getDB();
         if(!$db) return;
 
         $sql = "SELECT stardate FROM stars WHERE pid = ? AND login = ?";
-        $res = $db->query($sql,$ID,$_SERVER['REMOTE_USER']);
+        $res = $db->query($sql,$custom_ID,$_SERVER['REMOTE_USER']);
         $row = $db->res2row($res);
         return (int) $row['stardate'];
     }
@@ -93,28 +97,51 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
     }
 
     /**
-     * Print the current star state
+     * Print the current star state for the current page
      * @param bool $inneronly TBD
      * @param bool $print Should the HTML be printed or returned?
-     * @return null|string
+     * @return bool|string
      */
     function tpl_starred($inneronly=false, $print=true){
         global $ID;
-        if(!isset($_SERVER['REMOTE_USER'])) return;
-
-        $dt = $this->_starmode();
-        
-        $ret = '';
-
-        if(!$inneronly) $ret .= '<a href="'.wl($ID,array('do'=>'startoggle')).'" id="plugin__starred">';
-        if($dt){
-            $ret .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star.png" width="16" height="16" title="'.$this->getLang('star_on').'" alt="★" />';
-        }else{
-            $ret .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star_grey.png" width="16" height="16" title="'.$this->getLang('star_off').'" alt="☆" />';
+        if(!isset($_SERVER['REMOTE_USER'])) return false;
+        $star_html =  $this->create_star_html($ID, $ID, $inneronly, true);
+        if ($print) {
+            echo $star_html;
         }
-        if(!$inneronly) $ret .= '</a>';
-        if($print) echo $ret;
-        return $ret;
+        return $star_html;
+    }
+
+    /**
+     * Create the html for a star
+     *
+     * @param string $ID        The page where the star is supposed to appear.
+     * @param string $custom_ID The page which the star is supposed to toggle.
+     * @param bool   $inneronly
+     * @param bool   $id        Must not be true more than once per page
+     * @return string The html for the star
+     */
+    function create_star_html($ID, $custom_ID, $inneronly=false, $id=false) {
+        $result = '';
+        $dt = $this->_starmode($custom_ID);
+        if($inneronly === false) {
+            $result .= '<a href="' . wl($ID, array('do' => 'startoggle_' . $custom_ID)) . '" data-pageid="'.$custom_ID.'" class="plugin__starred"';
+            if($id === true) {
+                $result .= ' id="plugin__starred">';
+            } else {
+                $result .= '>';
+            }
+        }
+
+        if($dt){
+            $result .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star.png" width="16" height="16" title="'.$this->getLang('star_on').'" alt="★" />';
+        }else{
+            $result .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star_grey.png" width="16" height="16" title="'.$this->getLang('star_off').'" alt="☆" />';
+        }
+        if(!$inneronly) {
+            $result .=  '</a>';
+        }
+        return $result;
     }
 
 }
