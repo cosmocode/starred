@@ -17,7 +17,7 @@ require_once(DOKU_PLUGIN.'action.php');
 
 class action_plugin_starred extends DokuWiki_Action_Plugin {
 
-    function register(&$controller) {
+    function register(Doku_Event_Handler $controller) {
 
        $controller->register_hook('AJAX_CALL_UNKNOWN', 'BEFORE', $this, 'handle_ajax_call_unknown');
        $controller->register_hook('ACTION_ACT_PREPROCESS', 'BEFORE', $this, 'handle_action_act_preprocess');
@@ -98,20 +98,27 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
 
     /**
      * Print the current star state for the current page
+     * @param bool $inneronly TBD
+     * @param bool $print Should the HTML be printed or returned?
+     * @return bool|string
      */
-    function tpl_starred($inneronly=false){
+    function tpl_starred($inneronly=false, $print=true){
         global $ID;
-        if(!isset($_SERVER['REMOTE_USER'])) return;
-        echo $this->create_star_html($ID, $ID, $inneronly, true);
+        if(!isset($_SERVER['REMOTE_USER'])) return false;
+        $star_html =  $this->create_star_html($ID, $ID, $inneronly, true);
+        if ($print) {
+            echo $star_html;
+        }
+        return $star_html;
     }
 
     /**
      * Create the html for a star
      *
-     * @param $ID The page where the star is supposed to appear.
-     * @param $custom_ID The page which the star is supposed to toggle.
-     * @param bool $inneronly
-     * @param bool $id Must not be true more than once per page
+     * @param string $ID        The page where the star is supposed to appear.
+     * @param string $custom_ID The page which the star is supposed to toggle.
+     * @param bool   $inneronly
+     * @param bool   $id        Must not be true more than once per page
      * @return string The html for the star
      */
     function create_star_html($ID, $custom_ID, $inneronly=false, $id=false) {
