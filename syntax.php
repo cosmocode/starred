@@ -33,6 +33,7 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
 
     function render($mode, Doku_Renderer $R, $data) {
         if($mode != 'xhtml') return false;
+        /** @var Doku_Renderer_xhtml $R */
         $R->info['cache'] = false;
 
         if(!isset($_SERVER['REMOTE_USER'])){
@@ -40,8 +41,9 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
             return true;
         }
 
-        $action =& plugin_load('action','starred');
-        $db = $action->_getDB();
+        /** @var action_plugin_starred $starred */
+        $starred = plugin_load('action','starred');
+        $db = $starred->_getDB();
         if(!$db) return true;
 
         $sql = "SELECT pid, stardate FROM stars WHERE ";
@@ -69,7 +71,7 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
             $R->doc .= '</div>';
             return true;
         }
-        $starred = plugin_load('action','starred');
+
         $R->doc .= '<ul>';
         foreach($arr as $row){
             $R->listitem_open(1);
