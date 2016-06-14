@@ -2,8 +2,8 @@
  * Attach AJAX action to the star
  */
 jQuery(function(){
+    'use strict';
     var obj = jQuery('#plugin__starred');
-    if(!obj) return;
 
     obj.click(function(e) {
         jQuery.post(DOKU_BASE + 'lib/exe/ajax.php', {
