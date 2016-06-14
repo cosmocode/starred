@@ -125,7 +125,7 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
         $result = '';
         $dt = $this->_starmode($custom_ID);
         if($inneronly === false) {
-            $result .= '<a href="' . wl($ID, array('do' => 'startoggle_' . $custom_ID)) . '" class="plugin__starred"';
+            $result .= '<a href="' . wl($ID, array('do' => 'startoggle_' . $custom_ID)) . '" data-pageid="'.$custom_ID.'" class="plugin__starred"';
             if($id === true) {
                 $result .= ' id="plugin__starred">';
             } else {
