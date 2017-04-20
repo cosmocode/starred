@@ -31,7 +31,6 @@ jQuery(function(){
         e.stopPropagation();
 
         jQuery(this).closest('li').remove();
-
     });
 
 });
