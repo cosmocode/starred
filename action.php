@@ -134,9 +134,15 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
         }
 
         if($dt){
-            $result .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star.png" width="16" height="16" title="'.$this->getLang('star_on').'" alt="★" />';
+            $result .= '<span title="'.$this->getLang('star_on').'" class="starred on">';
+            $result .= inlineSVG(__DIR__ . '/pix/star.svg');
+            $result .= '</span>';
+            //$result .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star.png" width="16" height="16" title="'.$this->getLang('star_on').'" alt="★" />';
         }else{
-            $result .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star_grey.png" width="16" height="16" title="'.$this->getLang('star_off').'" alt="☆" />';
+            $result .= '<span title="'.$this->getLang('star_off').'" class="starred off">';
+            $result .= inlineSVG(__DIR__ . '/pix/star-outline.svg');
+            $result .= '</span>';
+            //$result .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star_grey.png" width="16" height="16" title="'.$this->getLang('star_off').'" alt="☆" />';
         }
         if(!$inneronly) {
             $result .=  '</a>';
