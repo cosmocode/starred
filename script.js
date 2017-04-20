@@ -11,6 +11,7 @@ jQuery(function(){
                 id: JSINFO['id']
             }).done(function (data) {
                     obj.html(data);
+                    obj.blur();
                 });
 
         e.preventDefault();
