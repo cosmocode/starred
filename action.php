@@ -56,7 +56,7 @@ class action_plugin_starred extends DokuWiki_Action_Plugin
      * @param Doku_Event $event ACTION_ACT_PREPROCESS
      * @param $param
      */
-    function handle_action_act_preprocess(Doku_Event $event, $param)
+    public function handle_action_act_preprocess(Doku_Event $event, $param)
     {
         if (substr(act_clean($event->data), 0, 10) != 'startoggle') return;
         $id = substr($event->data, 11);
@@ -70,7 +70,7 @@ class action_plugin_starred extends DokuWiki_Action_Plugin
      * @param bool $print Should the HTML be printed or returned?
      * @return bool|string
      */
-    protected function tpl_starred($inneronly = false, $print = true)
+    public function tpl_starred($inneronly = false, $print = true)
     {
         global $ID;
         global $INPUT;
