@@ -1,7 +1,7 @@
 base   starred
 author Andreas Gohr
 email  dokuwiki@cosmocode.de
-date   2017-04-20
+date   2023-04-18
 name   starred plugin
 desc   Personal bookmarking for pages
 url    http://www.dokuwiki.org/plugin:starred
