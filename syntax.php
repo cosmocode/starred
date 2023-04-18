@@ -41,10 +41,12 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
     /** @inheritdoc */
     function render($mode, Doku_Renderer $R, $data) {
         if($mode != 'xhtml') return false;
+        global $INPUT;
+
         /** @var Doku_Renderer_xhtml $R */
         $R->info['cache'] = false;
 
-        if(!isset($_SERVER['REMOTE_USER'])){
+        if(!$INPUT->server->has('REMOTE_USER')){
             $R->cdata($this->getLang('login'));
             return true;
         }
@@ -79,6 +81,7 @@ class syntax_plugin_starred extends DokuWiki_Syntax_Plugin {
         }
         $R->listu_close();
         $R->doc .= '</div>';
+        return true;
     }
 }
 

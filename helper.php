@@ -37,6 +37,7 @@ class helper_plugin_starred extends DokuWiki_Plugin {
      */
     public function toggleStar($user = null, $pageid = null) {
         global $ID;
+        global $INPUT;
 
         // DB access
         $db = $this->getDB();
@@ -44,7 +45,7 @@ class helper_plugin_starred extends DokuWiki_Plugin {
 
         // param defaults
         if($pageid === null) $pageid = $ID;
-        if($user === null) $user = $_SERVER['REMOTE_USER'];
+        if($user === null) $user = $INPUT->server->str('REMOTE_USER');
         if(blank($user)) return;
 
         $on = $this->checkStar($user, $pageid); // currently on?
@@ -69,6 +70,7 @@ class helper_plugin_starred extends DokuWiki_Plugin {
      */
     public function checkStar($user = null, $pageid = null) {
         global $ID;
+        global $INPUT;
 
         // DB access
         $db = $this->getDB();
@@ -76,7 +78,7 @@ class helper_plugin_starred extends DokuWiki_Plugin {
 
         // param defaults
         if($pageid === null) $pageid = $ID;
-        if($user === null) $user = $_SERVER['REMOTE_USER'];
+        if($user === null) $user = $INPUT->server->str('REMOTE_USER');
         if(blank($user)) return false;
 
         $sql = "SELECT stardate FROM stars WHERE pid = ? AND login = ?";
@@ -93,12 +95,13 @@ class helper_plugin_starred extends DokuWiki_Plugin {
      * @return array|bool
      */
     public function loadStars($user = null, $limit = 0) {
+        global $INPUT;
         $result = array();
 
         $db = $this->getDB();
         if(!$db) return $result;
 
-        if($user === null) $user = $_SERVER['REMOTE_USER'];
+        if($user === null) $user = $INPUT->server->str('REMOTE_USER');
         if(blank($user)) return $result;
 
         /** @var DokuWiki_Auth_Plugin $auth */

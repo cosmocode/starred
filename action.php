@@ -44,7 +44,8 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
     function handle_ajax_call_unknown(Doku_Event $event, $param) {
         if($event->data != 'startoggle') return;
         global $ID;
-        $ID = cleanID($_REQUEST['id']);
+        global $INPUT;
+        $ID = cleanID($INPUT->str('id'));
 
         $this->helper->toggleStar();
         $this->tpl_starred(true);
@@ -73,7 +74,9 @@ class action_plugin_starred extends DokuWiki_Action_Plugin {
      */
     function tpl_starred($inneronly = false, $print = true) {
         global $ID;
-        if(!isset($_SERVER['REMOTE_USER'])) return false;
+        global $INPUT;
+
+        if(!$INPUT->server->has('REMOTE_USER')) return false;
         $star_html = $this->helper->starHtml($ID, $ID, $inneronly, true);
         if($print) {
             echo $star_html;
