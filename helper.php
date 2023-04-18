@@ -5,13 +5,6 @@
  * @license GPL 2 http://www.gnu.org/licenses/gpl-2.0.html
  * @author  Andreas Gohr <dokuwiki@cosmocode.de>
  */
-
-// must be run within Dokuwiki
-if(!defined('DOKU_INC')) die();
-
-/**
- * Class helper_plugin_starred
- */
 class helper_plugin_starred extends DokuWiki_Plugin {
 
     /**
