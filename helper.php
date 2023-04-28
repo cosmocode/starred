@@ -144,11 +144,13 @@ class helper_plugin_starred extends DokuWiki_Plugin {
 
         if($dt){
             $result .= '<span title="'.$this->getLang('star_on').'" class="starred on">';
+            $result .= '<span class="a11y">' . $this->getLang('a11y_unstar_page') . '</span>';
             $result .= inlineSVG(__DIR__ . '/pix/star.svg');
             $result .= '</span>';
             //$result .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star.png" width="16" height="16" title="'.$this->getLang('star_on').'" alt="★" />';
         }else{
             $result .= '<span title="'.$this->getLang('star_off').'" class="starred off">';
+            $result .= '<span class="a11y">' . $this->getLang('a11y_star_page') . '</span>';
             $result .= inlineSVG(__DIR__ . '/pix/star-outline.svg');
             $result .= '</span>';
             //$result .= '<img src="'.DOKU_BASE.'lib/plugins/starred/pix/star_grey.png" width="16" height="16" title="'.$this->getLang('star_off').'" alt="☆" />';
